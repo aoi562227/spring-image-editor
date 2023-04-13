@@ -71,6 +71,8 @@ const Locale_kor = {
   ZoomIn: "확대",
   ZoomOut: "축소",
   // etc...'Mask', 'Threshold', 'Value'
+  Login: "로그인",
+  "Sign Up": "회원가입",
 };
 
 export default Locale_kor;

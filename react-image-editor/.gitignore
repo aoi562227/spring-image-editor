@@ -1,8 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+!/node_modules/@toast-ui/
 !/node_modules/tui-image-editor/
+
 /node_modules/*
+
+!/node_modules/@toast-ui/
 !/node_modules/tui-image-editor/
 /.pnp
 .pnp.js
