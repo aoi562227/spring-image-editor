@@ -1,34 +1,9 @@
-import React, { useState, useRef } from "react";
-import SignUp from "./signUp";
-import Login from "./login";
-import Modal from "react-modal";
+import React, { useRef } from "react";
 import { saveAs } from "file-saver";
-
-const base64ToBlob = (data) => {
-  const rImageType = /data:(image\/.+);base64,/;
-  let mimeString = "";
-  let raw, uInt8Array, i;
-
-  raw = data.replace(rImageType, (header, imageType) => {
-    mimeString = imageType;
-
-    return "";
-  });
-
-  raw = atob(raw);
-  const rawLength = raw.length;
-  uInt8Array = new Uint8Array(rawLength); // eslint-disable-line
-
-  for (i = 0; i < rawLength; i += 1) {
-    uInt8Array[i] = raw.charCodeAt(i);
-  }
-
-  return new Blob([uInt8Array], { type: mimeString });
-};
+import { useNavigate } from 'react-router-dom';
+import {base64ToBlob} from "./util"
 
 const AppHeader = (props) => {
-  const [signUpIsOpen, setSignUpIsOpen] = useState(false);
-  const [loginIsOpen, setLoginIsOpen] = useState(false);
   const fileUploadInput = useRef(null);
 
   const { myImageEditor } = props;
@@ -71,35 +46,24 @@ const AppHeader = (props) => {
     typeName = imageName.split(".").pop();
     saveAs(blob, imageName.split(".")[0] + "-edited." + typeName); // eslint-disable-line
   };
+  const navigate = useNavigate();
+  const goUrlSignUp = () => {
+      navigate('/signUp');
+  };
+  const goUrlLogin = () => {
+      navigate('/login');
+  };
 
   return (
     <div className="AppHeader">
       <div className="title">이미지 에디터</div>
       <div className="buttons">
-        <button className="signUpBtn" onClick={() => setSignUpIsOpen(true)}>
+        <button className="signUpBtn" onClick = {goUrlSignUp}>
           회원가입
         </button>
-        <Modal
-          className="signUp"
-          isOpen={signUpIsOpen}
-          onRequestClose={() => setSignUpIsOpen(false)}
-        >
-          <SignUp />
-          <button onClick={() => setSignUpIsOpen(false)}>Modal Open</button>
-        </Modal>
-
-        <button className="loginBtn" onClick={() => setLoginIsOpen(true)}>
+        <button className="loginBtn" onClick = {goUrlLogin}>
           로그인
         </button>
-        <Modal
-          className="login"
-          isOpen={loginIsOpen}
-          onRequestClose={() => setLoginIsOpen(false)}
-        >
-          <Login />
-          <button onClick={() => setLoginIsOpen(false)}>Modal Open</button>
-        </Modal>
-
         <button
           className="loadBtn"
           onClick={() => {
