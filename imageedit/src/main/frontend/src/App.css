@@ -39,22 +39,48 @@
 */
 
 .AppHeader {
+  display: flex;
+  justify-content: space-between;
   min-width: 533px;
   background-color: #222;
   width: 100%;
 }
-.title {
-  display: inline-block;
+.title div,
+.title img{
+  float: left;
+  height: 40px;
   color: white;
 }
-.buttons {
-  display: inline-block;
+.headerButtons div,
+.headerButtons button{
+  display: inline-block;/*
+  float: right;*/
+  position: relative;
+  width: 120px;
+  height: 40px;
+  padding: 0;
+  margin: 2px;
   line-height: 40px;
+  outline: none;
+  border-radius: 20px;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+  letter-spacing: 0.3px;
+  text-align: center;
 }
 .signUpBtn,
+.loadBtn{
+  cursor: pointer;
+  border: 1px solid #ddd;
+}
 .loginBtn,
-.loadBtn,
 .downloadBtn {
+  color: white;
+  background-color: #fdba3b;
+  border: 1px solid #fdba3b;
   cursor: pointer;
 }
 .loginModal,

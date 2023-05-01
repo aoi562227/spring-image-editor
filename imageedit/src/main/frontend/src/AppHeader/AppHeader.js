@@ -56,8 +56,8 @@ const AppHeader = (props) => {
 
   return (
     <div className="AppHeader">
-      <div className="title">이미지 에디터</div>
-      <div className="buttons">
+      <div className="title"><img src="./img/titleLogo.png" alt="logo"/></div>
+      <div className="headerButtons">
         <button className="signUpBtn" onClick = {goUrlSignUp}>
           회원가입
         </button>
