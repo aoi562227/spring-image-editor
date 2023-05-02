@@ -46,14 +46,14 @@
   width: 100%;
 }
 .title div,
-.title img{
+.title img {
   float: left;
   height: 40px;
   color: white;
 }
 .headerButtons div,
-.headerButtons button{
-  display: inline-block;/*
+.headerButtons button {
+  display: inline-block; /*
   float: right;*/
   position: relative;
   width: 120px;
@@ -63,7 +63,7 @@
   line-height: 40px;
   outline: none;
   border-radius: 20px;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
   font-size: 12px;
   font-weight: bold;
   cursor: pointer;
@@ -72,11 +72,13 @@
   text-align: center;
 }
 .signUpBtn,
-.loadBtn{
+.projectLoadBtn,
+.loadBtn {
   cursor: pointer;
   border: 1px solid #ddd;
 }
 .loginBtn,
+.projectSaveBtn,
 .downloadBtn {
   color: white;
   background-color: #fdba3b;
@@ -84,7 +86,7 @@
   cursor: pointer;
 }
 .loginModal,
-.signUpModal{
+.signUpModal {
   position: fixed;
   top: 50%;
   left: 50%;

@@ -1,68 +1,54 @@
 import React, { useRef } from "react";
-import { saveAs } from "file-saver";
-import { useNavigate } from 'react-router-dom';
-import {base64ToBlob} from "./util"
+import { useNavigate } from "react-router-dom";
 
 const AppHeader = (props) => {
   const fileUploadInput = useRef(null);
+  const navigate = useNavigate();
+
+  const goUrlSignUp = () => {
+    navigate("/signUp");
+  };
+  const goUrlLogin = () => {
+    navigate("/login");
+  };
 
   const { myImageEditor } = props;
+
+  const onClickUpload = () => {
+    myImageEditor.current.imageEditorInst.ui.eventHandler.upload();
+  };
+
+  const onClickSave = (e) => {};
 
   const onClickLoad = (e) => {
     const file = e.target.files[0];
 
-    if (!(window.File && window.FileList && window.FileReader)) {
-      alert("This browser does not support file-api");
+    if (file) {
+      myImageEditor.current.imageEditorInst.ui.eventHandler.loadImage(e);
     }
-
-    myImageEditor.current.imageEditorInst.ui.initializeImgUrl =
-      URL.createObjectURL(file);
-    myImageEditor.current.imageEditorInst
-      .loadImageFromFile(file)
-      .then((sizeValue) => {
-        myImageEditor.current.imageEditorInst.ui.exitCropOnAction();
-        myImageEditor.current.imageEditorInst.ui.initFilterState();
-        myImageEditor.current.imageEditorInst.ui.clearUndoStack();
-        myImageEditor.current.imageEditorInst.ui.activeMenuEvent();
-        myImageEditor.current.imageEditorInst.ui.resizeEditor({
-          imageSize: sizeValue,
-        });
-        myImageEditor.current.imageEditorInst.ui._clearHistory();
-        myImageEditor.current.imageEditorInst.ui._invoker.fire(
-          myImageEditor.current.imageEditorInst.ui.eventNames.EXECUTE_COMMAND,
-          myImageEditor.current.imageEditorInst.ui.historyNames.LOAD_IMAGE
-        );
-      })
-      ["catch"]((message) => Promise.reject(message));
   };
 
   const onClickDownload = (e) => {
-    const dataURL = myImageEditor.current.imageEditorInst.toDataURL();
-    let imageName = myImageEditor.current.imageEditorInst.getImageName();
-    let blob;
-    let typeName;
-
-    blob = base64ToBlob(dataURL);
-    typeName = imageName.split(".").pop();
-    saveAs(blob, imageName.split(".")[0] + "-edited." + typeName); // eslint-disable-line
-  };
-  const navigate = useNavigate();
-  const goUrlSignUp = () => {
-      navigate('/signUp');
-  };
-  const goUrlLogin = () => {
-      navigate('/login');
+    myImageEditor.current.imageEditorInst.ui.eventHandler.download();
   };
 
   return (
     <div className="AppHeader">
-      <div className="title"><img src="./img/titleLogo.png" alt="logo"/></div>
+      <div className="title">
+        <img src="./img/titleLogo.png" alt="logo" />
+      </div>
       <div className="headerButtons">
-        <button className="signUpBtn" onClick = {goUrlSignUp}>
+        <button className="signUpBtn" onClick={goUrlSignUp}>
           회원가입
         </button>
-        <button className="loginBtn" onClick = {goUrlLogin}>
+        <button className="loginBtn" onClick={goUrlLogin}>
           로그인
+        </button>
+        <button className="projectLoadBtn" onClick={onClickSave}>
+          프로젝트 가져오기
+        </button>
+        <button className="projectSaveBtn" onClick={onClickUpload}>
+          프로젝트 저장
         </button>
         <button
           className="loadBtn"

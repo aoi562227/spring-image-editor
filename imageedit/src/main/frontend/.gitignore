@@ -5,6 +5,8 @@
 !/node_modules/tui-image-editor/
 
 /node_modules/*
+/node_modules/@toast-ui/react-image-editor/node_modules/
+/node_modules/tui-image-editor/node_modules/
 
 !/node_modules/@toast-ui/
 !/node_modules/tui-image-editor/
