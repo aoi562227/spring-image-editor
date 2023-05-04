@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React from "react";
 export default function loginForm() {
   const iframePart = () => {
     return {
@@ -7,12 +6,7 @@ export default function loginForm() {
     };
   };
 
-  return (
-  <div
-    dangerouslySetInnerHTML={iframePart()}
-  />
-
-  );
+  return <div dangerouslySetInnerHTML={iframePart()} />;
 }
 /*
 export default function loginForm() {

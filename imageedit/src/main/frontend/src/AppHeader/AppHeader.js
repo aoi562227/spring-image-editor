@@ -14,11 +14,11 @@ const AppHeader = (props) => {
 
   const { myImageEditor } = props;
 
-  const onClickUpload = () => {
+  const onClickUploadProject = () => {
     myImageEditor.current.imageEditorInst.ui.eventHandler.upload();
   };
 
-  const onClickSave = (e) => {};
+  const onClickLoadProject = (e) => {};
 
   const onClickLoad = (e) => {
     const file = e.target.files[0];
@@ -44,10 +44,10 @@ const AppHeader = (props) => {
         <button className="loginBtn" onClick={goUrlLogin}>
           로그인
         </button>
-        <button className="projectLoadBtn" onClick={onClickSave}>
+        <button className="projectLoadBtn" onClick={onClickLoadProject}>
           프로젝트 가져오기
         </button>
-        <button className="projectSaveBtn" onClick={onClickUpload}>
+        <button className="projectSaveBtn" onClick={onClickUploadProject}>
           프로젝트 저장
         </button>
         <button
