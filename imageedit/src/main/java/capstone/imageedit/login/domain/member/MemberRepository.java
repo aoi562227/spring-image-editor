@@ -1,4 +1,4 @@
-package hello.login.domain.member;
+package capstone.imageedit.login.domain.member;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

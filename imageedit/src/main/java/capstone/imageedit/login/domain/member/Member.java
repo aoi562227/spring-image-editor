@@ -1,4 +1,4 @@
-package hello.login.domain.member;
+package capstone.imageedit.login.domain.member;
 
 import lombok.Data;
 
