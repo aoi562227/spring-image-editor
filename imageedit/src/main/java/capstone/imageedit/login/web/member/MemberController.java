@@ -11,12 +11,12 @@ import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/members")
+//@RequestMapping("members")
 public class MemberController {
 
     private final MemberRepository memberRepository;
 
-    @GetMapping("/add")
+    @GetMapping("/signUp")
     public String addForm(@ModelAttribute("member") Member member) {
         return "members/addMemberForm";
     }
