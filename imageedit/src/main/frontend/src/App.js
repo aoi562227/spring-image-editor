@@ -4,7 +4,6 @@ import "./App.css";
 import Main from "./Main";
 import AddMemberForm from "./AppHeader/addMemberForm";
 import LoginForm from "./AppHeader/loginForm";
-import TestForm from "./AppHeader/testForm";
 
 const App = () => {
   return (
@@ -14,7 +13,6 @@ const App = () => {
           <Route exact path="/" element={<Main />}></Route>
           <Route path="/signUp" element={<AddMemberForm />}></Route>
           <Route path="/login" element={<LoginForm />}></Route>
-          <Route path="/test" element={<TestForm />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
