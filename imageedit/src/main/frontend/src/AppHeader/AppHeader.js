@@ -1,38 +1,32 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AddMemberForm from "./AddMemberForm";
 import LoginForm from "./LoginForm";
 
 const AppHeader = (props) => {
   const fileUploadInput = useRef(null);
-  const navigate = useNavigate();
-  /*
-  const goUrlSignUp = () => {
-    navigate("/signUp");
-  };
-  const goUrlLogin = () => {
-    navigate("/login");
-  };
-  */
-  const [addMemberIsOpen, setAddMemberIsOpen] = useState(false);
-  const [loginIsOpen, setLoginIsOpen] = useState(false);
-  const [userLoginState, setUserLoginState] = useState(false);
-  const [userName, setUserName] = useState("");
 
+  const [addMemberIsOpen, setAddMemberIsOpen] = useState(false); // 회원가입 창의 초기 표시 유무 false
+  const [loginIsOpen, setLoginIsOpen] = useState(false); // 로그인 창의 초기 표시 유무 false
+  const [userLoginState, setUserLoginState] = useState(false); // 로그인 유무 초기 상태 false
+  const [userName, setUserName] = useState(""); // 유저 이름 초기 상태 빈 문자열
+
+  // 회원가입 창 열기
   const openAddMember = () => {
     setAddMemberIsOpen(true);
   };
+  // 회원가입 창 닫기
   const closeAddMember = () => {
-    console.log("clicked");
     setAddMemberIsOpen(false);
   };
+  // 로그인 창 열기
   const openLogin = () => {
     setLoginIsOpen(true);
   };
+  // 로그인 창 닫기
   const closeLogin = () => {
-    console.log("clicked");
     setLoginIsOpen(false);
   };
+  // 로그아웃 기능
   const logout = () => {
     setUserLoginState(false);
     // 로그인 컴포넌트의 내용값 바꾸기
@@ -41,12 +35,15 @@ const AppHeader = (props) => {
 
   const { myImageEditor } = props;
 
+  // 프로젝트 저장. 미구현
   const onClickUploadProject = () => {
     myImageEditor.current.imageEditorInst.ui.eventHandler.upload();
   };
 
+  // 프로젝트 불러오기. 미구현
   const onClickLoadProject = (e) => {};
 
+  // 업로드
   const onClickLoad = (e) => {
     const file = e.target.files[0];
 
@@ -55,10 +52,12 @@ const AppHeader = (props) => {
     }
   };
 
+  // 다운로드
   const onClickDownload = (e) => {
     myImageEditor.current.imageEditorInst.ui.eventHandler.download();
   };
 
+  // 자식 컴포넌트(LoginForm)으로부터 userData 받아오기
   const getUserData = (name, loginState) => {
     setUserName(name);
     setUserLoginState(loginState);
@@ -70,7 +69,7 @@ const AppHeader = (props) => {
         <img src="./img/titleLogo.png" alt="logo" />
       </div>
       <div className="headerButtons">
-        {!userLoginState && ( // 회원가입과 로그인
+        {!userLoginState && ( // 회원가입과 로그인. 로그인 상태가 아니면 표시
           <>
             <button className="signUpBtn" onClick={openAddMember}>
               회원가입
@@ -89,7 +88,7 @@ const AppHeader = (props) => {
             ></LoginForm>
           </>
         )}
-        {userLoginState && ( // 로그아웃과 로그인 환영 메시지
+        {userLoginState && ( // 로그아웃과 로그인 환영 메시지. 로그인 상태라면 표시
           <>
             <div className="loginMsg">{userName}님, 환영합니다!</div>
             <button className="logoutBtn" onClick={logout}>
@@ -106,7 +105,7 @@ const AppHeader = (props) => {
         <button
           className="loadBtn"
           onClick={() => {
-            fileUploadInput.current.click();
+            fileUploadInput.current.click(); // 버튼 클릭시 file타입 input태그가 클릭되도록
           }}
         >
           업로드
