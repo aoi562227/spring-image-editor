@@ -1,73 +1,111 @@
-import React, { useRef } from "react";
-import { saveAs } from "file-saver";
-import { useNavigate } from 'react-router-dom';
-import {base64ToBlob} from "./util"
+import React, { useRef, useState } from "react";
+import AddMemberForm from "./AddMemberForm";
+import LoginForm from "./LoginForm";
 
 const AppHeader = (props) => {
   const fileUploadInput = useRef(null);
 
+  const [addMemberIsOpen, setAddMemberIsOpen] = useState(false); // 회원가입 창의 초기 표시 유무 false
+  const [loginIsOpen, setLoginIsOpen] = useState(false); // 로그인 창의 초기 표시 유무 false
+  const [userLoginState, setUserLoginState] = useState(false); // 로그인 유무 초기 상태 false
+  const [userName, setUserName] = useState(""); // 유저 이름 초기 상태 빈 문자열
+
+  // 회원가입 창 열기
+  const openAddMember = () => {
+    setAddMemberIsOpen(true);
+  };
+  // 회원가입 창 닫기
+  const closeAddMember = () => {
+    setAddMemberIsOpen(false);
+  };
+  // 로그인 창 열기
+  const openLogin = () => {
+    setLoginIsOpen(true);
+  };
+  // 로그인 창 닫기
+  const closeLogin = () => {
+    setLoginIsOpen(false);
+  };
+  // 로그아웃 기능
+  const logout = () => {
+    setUserLoginState(false);
+    // 로그인 컴포넌트의 내용값 바꾸기
+    window.location.reload();
+  };
+
   const { myImageEditor } = props;
 
+  // 프로젝트 저장. 미구현
+  const onClickUploadProject = () => {
+    myImageEditor.current.imageEditorInst.ui.eventHandler.upload();
+  };
+
+  // 프로젝트 불러오기. 미구현
+  const onClickLoadProject = (e) => {};
+
+  // 업로드
   const onClickLoad = (e) => {
     const file = e.target.files[0];
 
-    if (!(window.File && window.FileList && window.FileReader)) {
-      alert("This browser does not support file-api");
+    if (file) {
+      myImageEditor.current.imageEditorInst.ui.eventHandler.loadImage(e);
     }
-
-    myImageEditor.current.imageEditorInst.ui.initializeImgUrl =
-      URL.createObjectURL(file);
-    myImageEditor.current.imageEditorInst
-      .loadImageFromFile(file)
-      .then((sizeValue) => {
-        myImageEditor.current.imageEditorInst.ui.exitCropOnAction();
-        myImageEditor.current.imageEditorInst.ui.initFilterState();
-        myImageEditor.current.imageEditorInst.ui.clearUndoStack();
-        myImageEditor.current.imageEditorInst.ui.activeMenuEvent();
-        myImageEditor.current.imageEditorInst.ui.resizeEditor({
-          imageSize: sizeValue,
-        });
-        myImageEditor.current.imageEditorInst.ui._clearHistory();
-        myImageEditor.current.imageEditorInst.ui._invoker.fire(
-          myImageEditor.current.imageEditorInst.ui.eventNames.EXECUTE_COMMAND,
-          myImageEditor.current.imageEditorInst.ui.historyNames.LOAD_IMAGE
-        );
-      })
-      ["catch"]((message) => Promise.reject(message));
   };
 
+  // 다운로드
   const onClickDownload = (e) => {
-    const dataURL = myImageEditor.current.imageEditorInst.toDataURL();
-    let imageName = myImageEditor.current.imageEditorInst.getImageName();
-    let blob;
-    let typeName;
+    myImageEditor.current.imageEditorInst.ui.eventHandler.download();
+  };
 
-    blob = base64ToBlob(dataURL);
-    typeName = imageName.split(".").pop();
-    saveAs(blob, imageName.split(".")[0] + "-edited." + typeName); // eslint-disable-line
-  };
-  const navigate = useNavigate();
-  const goUrlSignUp = () => {
-      navigate('/signUp');
-  };
-  const goUrlLogin = () => {
-      navigate('/login');
+  // 자식 컴포넌트(LoginForm)으로부터 userData 받아오기
+  const getUserData = (name, loginState) => {
+    setUserName(name);
+    setUserLoginState(loginState);
   };
 
   return (
     <div className="AppHeader">
-      <div className="title">이미지 에디터</div>
-      <div className="buttons">
-        <button className="signUpBtn" onClick = {goUrlSignUp}>
-          회원가입
+      <div className="title">
+        <img src="./img/titleLogo.png" alt="logo" />
+      </div>
+      <div className="headerButtons">
+        {!userLoginState && ( // 회원가입과 로그인. 로그인 상태가 아니면 표시
+          <>
+            <button className="signUpBtn" onClick={openAddMember}>
+              회원가입
+            </button>
+            <AddMemberForm
+              addMemberIsOpen={addMemberIsOpen}
+              closeAddMember={closeAddMember}
+            ></AddMemberForm>
+            <button className="loginBtn" onClick={openLogin}>
+              로그인
+            </button>
+            <LoginForm
+              loginIsOpen={loginIsOpen}
+              closeLogin={closeLogin}
+              returnUserData={getUserData}
+            ></LoginForm>
+          </>
+        )}
+        {userLoginState && ( // 로그아웃과 로그인 환영 메시지. 로그인 상태라면 표시
+          <>
+            <div className="loginMsg">{userName}님, 환영합니다!</div>
+            <button className="logoutBtn" onClick={logout}>
+              로그아웃
+            </button>
+          </>
+        )}
+        <button className="projectLoadBtn" onClick={onClickLoadProject}>
+          프로젝트 가져오기
         </button>
-        <button className="loginBtn" onClick = {goUrlLogin}>
-          로그인
+        <button className="projectSaveBtn" onClick={onClickUploadProject}>
+          프로젝트 저장
         </button>
         <button
           className="loadBtn"
           onClick={() => {
-            fileUploadInput.current.click();
+            fileUploadInput.current.click(); // 버튼 클릭시 file타입 input태그가 클릭되도록
           }}
         >
           업로드
