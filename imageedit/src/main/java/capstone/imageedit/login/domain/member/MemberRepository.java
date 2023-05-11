@@ -19,7 +19,7 @@ import java.util.List;
 //    }
 //}
 public interface MemberRepository extends JpaRepository<Member,String> {
-    public List<Member> findMemberByLoginId(String loginId);
+    public Member findMemberByLoginId(String loginId);
 }
 
 
