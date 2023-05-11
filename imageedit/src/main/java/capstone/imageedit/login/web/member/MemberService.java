@@ -34,6 +34,7 @@ public class MemberService {
         Member memberByLoginId = memberRepository.findMemberByLoginId(member.getLoginId());
         if (member.getPassword().equals(memberByLoginId.getPassword())) {
             log.info("로그인 성공");
+            return memberByLoginId;
         }
         return member;
     }

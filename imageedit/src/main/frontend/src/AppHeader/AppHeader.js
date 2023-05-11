@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddMemberForm from "./AddMemberForm";
 import LoginForm from "./LoginForm";
 
@@ -30,7 +30,7 @@ const AppHeader = (props) => {
   const logout = () => {
     setUserLoginState(false);
     // 로그인 컴포넌트의 내용값 바꾸기
-    window.location.reload();
+    //window.location.reload();
   };
 
   const { myImageEditor } = props;
@@ -62,6 +62,9 @@ const AppHeader = (props) => {
     setUserName(name);
     setUserLoginState(loginState);
   };
+  useEffect(() => {
+    console.log(userLoginState);
+  }, [userLoginState]);
 
   return (
     <div className="AppHeader">

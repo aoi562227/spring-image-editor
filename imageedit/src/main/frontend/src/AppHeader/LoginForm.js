@@ -10,7 +10,7 @@ const reducer = (state, action) => {
   };
 };
 const LoginForm = (props) => {
-  const [userName, setUserName] = useState(""); // 유저 이름 초기 상태 빈 문자열
+  //const [userName, setUserName] = useState(""); // 유저 이름 초기 상태 빈 문자열
 
   // userInfo - user 정보 데이터 / changeUserInfo - userInfo 변경 함수
   const [userInfo, changeUserInfo] = useReducer(reducer, {
@@ -28,10 +28,8 @@ const LoginForm = (props) => {
   const onChange = (e) => {
     changeUserInfo(e.target);
   };
-
   // 서버로 데이터 전송
   const onClickSubmit = async (e) => {
-    // 하나라도 유효성 체크를 통과 못한다면
     e.preventDefault(); // 로그인 창을 닫지 않음
     if (!userEmail || !userPassword) {
       alert("입력한 값들을 다시 확인해주세요!");
@@ -43,10 +41,10 @@ const LoginForm = (props) => {
           password: userPassword,
         })
         .then((response) => {
-          if (response.data === "성공") {
-            // 성공했다면
-            setUserName(response.data.name); // 이름 설정을 위해서 name 데이터가 필요
-            returnUserData(userName, true); // 부모 컴포넌트(AppHeader)로 userName과 로그인 상태 전달
+          // 성공했다면
+          if (response.data.name !== null) {
+            console.log("response data: " + JSON.stringify(response.data));
+            returnUserData(`${response.data.name}`, true); // 부모 컴포넌트(AppHeader)로 name과 로그인 성공 전달
             // 기존에 input 태그에 입력했던 값들 제거
             for (const [key, value] of Object.entries({
               userEmail: "",
@@ -56,11 +54,16 @@ const LoginForm = (props) => {
               changeUserInfo({ name: `${key}`, value: `${value}` });
             }
             props.closeLogin(); // 로그인 창 닫기
-          } else alert(response.data); // 실패했다면
+          } // 실패했다면
+          else
+            alert(
+              "이메일 정보와 일치하지 않습니다.\n패스워드를 다시 입력해주세요!"
+            );
         })
         .catch((error) => {
-          // 에러메시지 출력
-          console.log(error);
+          alert("정보를 찾을 수 없습니다.\n이메일을 다시 입력해주세요!"); // 실패했다면
+          // 에러메시지 콘솔 출력
+          console.log(error); // 'Request failed with status code 500'
         });
     }
   };
