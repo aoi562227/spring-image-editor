@@ -1,33 +1,32 @@
 package capstone.imageedit.login.web.member;
 
 import capstone.imageedit.login.domain.member.Member;
-import capstone.imageedit.login.domain.member.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
-@Controller
-@RequiredArgsConstructor
-//@RequestMapping("members")
+//@RequiredArgsConstructor
+@RestController
+@Slf4j
+//@ResponseBody
+//@RequestMapping("/api")
 public class MemberController {
+    @Autowired
+    private MemberService memberService;
 
-    private final MemberRepository memberRepository;
+//    @ResponseBody
+    @PostMapping("/signUp")
+    public String signUp(@RequestBody Member member) {
+//        MemberDto member = new MemberDto(req.get("loginId"), req.get("password"), req.get("name"));
+//        System.out.println("req = " + req);
+//        System.out.println((member.toString()));
 
-    @GetMapping("/signUp")
-    public String addForm(@ModelAttribute("member") Member member) {
-        return "members/addMemberForm";
+//        log.info(member.getLoginId());
+//        log.info(member.getPassword());
+//        log.info(member.getName());
+        return memberService.join(member);
     }
-
-//    @PostMapping("/add")
-//    public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "members/addMemberForm";
-//        }
-//
-//        memberRepository.save(member);
-//        return "redirect:/";
-//    }
 }
+
+

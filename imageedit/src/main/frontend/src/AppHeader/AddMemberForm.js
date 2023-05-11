@@ -66,7 +66,7 @@ const AddMemberForm = (props) => {
           // /signUp 주소로 데이터 전달
           loginId: userEmail,
           password: userPassword,
-          name: userName,
+          name: userName
         })
         .then((response) => {
           // 가입 처리 부분. 성공했는지 true false 리턴이 필요할 것 같습니다.

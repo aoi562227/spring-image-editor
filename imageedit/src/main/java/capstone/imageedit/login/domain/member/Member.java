@@ -1,33 +1,73 @@
 package capstone.imageedit.login.domain.member;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
-@Data
 @Entity
-@Getter @Setter
 public class Member {
+//    @Builder
+
+    public Member() {
+    }
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //    public Member(String loginId, String password, String name) {
+//        this.loginId = loginId;
+//        this.password = password;
+//        this.name = name;
+//    }
 
     @Id
-    @GeneratedValue
-    @Column(name = "member_id")
-    private Long id;
-
-    @NotEmpty
     private String loginId;
-
-    @NotEmpty
+    private String password;
     private String name;
 
-    @NotEmpty
-    private String password;
+
+
+//    @NotNull
+//    private LocalDateTime createDate;
+
+//    @Builder
+//    public Member(String loginId, String password, String name) {
+//        this.loginId = loginId;
+//        this.password = password;
+//        this.name = name;
+//        this.createDate = LocalDateTime.now();
+//    }
+
+
+
+
+
 
 
 }
