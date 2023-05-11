@@ -18,6 +18,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+
     public String join(Member member) {
 //        Member member = new Member(dto.getLoginId(),dto.getPassword(),dto.getName());
         if (validateDuplicateMember(member)) {
@@ -27,15 +28,21 @@ public class MemberService {
         } else {
             return "이미 존재하는 회원입니다";
         }
+    }
 
-
+    public Member login(Member member) {
+        Member memberByLoginId = memberRepository.findMemberByLoginId(member.getLoginId());
+        if (member.getPassword().equals(memberByLoginId.getPassword())) {
+            log.info("로그인 성공");
+        }
+        return member;
     }
 
 
     private boolean validateDuplicateMember(Member member) {
-        List<Member> findMember =
+        Member findMember =
                 memberRepository.findMemberByLoginId(member.getLoginId());
-        if (!findMember.isEmpty()) {
+        if (findMember!=null) {
             log.info("회원 중복");
             return false;
         } else {

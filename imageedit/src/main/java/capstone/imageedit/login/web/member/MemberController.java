@@ -15,7 +15,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-//    @ResponseBody
+    //    @ResponseBody
     @PostMapping("/signUp")
     public String signUp(@RequestBody Member member) {
 //        MemberDto member = new MemberDto(req.get("loginId"), req.get("password"), req.get("name"));
@@ -26,6 +26,12 @@ public class MemberController {
 //        log.info(member.getPassword());
 //        log.info(member.getName());
         return memberService.join(member);
+    }
+
+    @PostMapping("login")
+    @ResponseBody
+    public Member login(@RequestBody Member member) {
+        return memberService.login(member);
     }
 }
 
