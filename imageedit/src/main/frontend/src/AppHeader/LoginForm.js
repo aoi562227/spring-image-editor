@@ -32,9 +32,9 @@ const LoginForm = (props) => {
   // 서버로 데이터 전송
   const onClickSubmit = async (e) => {
     // 하나라도 유효성 체크를 통과 못한다면
+    e.preventDefault(); // 로그인 창을 닫지 않음
     if (!userEmail || !userPassword) {
       alert("입력한 값들을 다시 확인해주세요!");
-      e.preventDefault(); // 로그인 창을 닫지 않음
     } else {
       await axios
         .post("/login", {
@@ -43,15 +43,20 @@ const LoginForm = (props) => {
           password: userPassword,
         })
         .then((response) => {
-          // 로그인 처리 부분. 이쪽도 성공했는지 true false 리턴이 필요할 것 같습니다
-          console.log(response.data); // 받아온 데이터를 콘솔에 출력
-          if (response.data) {
+          if (response.data === "성공") {
             // 성공했다면
             setUserName(response.data.name); // 이름 설정을 위해서 name 데이터가 필요
             returnUserData(userName, true); // 부모 컴포넌트(AppHeader)로 userName과 로그인 상태 전달
-            document.getElementById(userEmail).value = null; // 사용자가 input태그에 입력했던 값 초기화
-            document.getElementById(userPassword).value = null;
-          } else alert("입력한 값들을 다시 확인해주세요!"); // 실패했다면
+            // 기존에 input 태그에 입력했던 값들 제거
+            for (const [key, value] of Object.entries({
+              userEmail: "",
+              userPassword: "",
+            })) {
+              document.getElementsByName(`${key}`)[0].value = null;
+              changeUserInfo({ name: `${key}`, value: `${value}` });
+            }
+            props.closeLogin(); // 로그인 창 닫기
+          } else alert(response.data); // 실패했다면
         })
         .catch((error) => {
           // 에러메시지 출력

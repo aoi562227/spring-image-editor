@@ -56,30 +56,37 @@ const AddMemberForm = (props) => {
 
   // 서버로 데이터 전송
   const onClickSubmit = async (e) => {
+    e.preventDefault(); // 회원가입 창을 닫지 않음
     if (emailError || passwordError || nameError) {
       // 하나라도 유효성 체크를 통과 못한다면
       alert("입력한 값들을 다시 확인해주세요!");
-      e.preventDefault(); // 회원가입 창을 닫지 않음
     } else {
       await axios
         .post("/signUp", {
           // /signUp 주소로 데이터 전달
           loginId: userEmail,
           password: userPassword,
-          name: userName
+          name: userName,
         })
         .then((response) => {
-          // 가입 처리 부분. 성공했는지 true false 리턴이 필요할 것 같습니다.
-          console.log(response.data); // 받아온 데이터를 콘솔에 출력
-          if (response.data) {
+          console.log(response.data); // 받아온 데이터 콘솔에 출력
+          if (response.data === "성공") {
             // 성공했다면
-            document.getElementById(userEmail).value = null; // 사용자가 input태그에 입력했던 값 초기화
-            document.getElementById(userPassword).value = null;
-            document.getElementById(userName).value = null;
-          } else alert("입력한 값들을 다시 확인해주세요!"); // 실패했다면
+            alert("회원가입 " + response.data); // "회원가입 성공"
+            // 기존에 input 태그에 입력했던 값들 제거
+            for (const [key, value] of Object.entries({
+              userEmail: "",
+              userPassword: "",
+              userName: "",
+            })) {
+              document.getElementsByName(`${key}`)[0].value = null;
+              changeUserInfo({ name: `${key}`, value: `${value}` });
+            }
+            props.closeAddMember(); // 회원가입 창 닫기
+          } else alert(response.data); // 실패했다면. "이미 존재하는 회원입니다"
         })
         .catch((error) => {
-          // 에러메시지 출력
+          // 에러메시지 콘솔 출력
           console.log(error);
         });
     }
