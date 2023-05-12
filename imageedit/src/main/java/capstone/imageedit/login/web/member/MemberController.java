@@ -28,9 +28,9 @@ public class MemberController {
         return memberService.join(member);
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     @ResponseBody
-    public Member login(@RequestBody Member member) {
+    public Member login(@RequestBody Member member) throws Exception {
         return memberService.login(member);
     }
 }

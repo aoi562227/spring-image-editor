@@ -1,5 +1,6 @@
 package capstone.imageedit.login.domain.member;
 
+import capstone.imageedit.util.Aes256Converter;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.GenericGenerator;
@@ -48,6 +49,7 @@ public class Member {
 
     @Id
     private String loginId;
+    @Convert(converter = Aes256Converter.class)
     private String password;
     private String name;
 
@@ -56,13 +58,12 @@ public class Member {
 //    @NotNull
 //    private LocalDateTime createDate;
 
-//    @Builder
-//    public Member(String loginId, String password, String name) {
-//        this.loginId = loginId;
-//        this.password = password;
-//        this.name = name;
-//        this.createDate = LocalDateTime.now();
-//    }
+    @Builder
+    public Member(String loginId, String password, String name) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+    }
 
 
 
