@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 
@@ -57,11 +57,11 @@ const LoginForm = (props) => {
           } // 실패했다면
           else
             alert(
-              "이메일 정보와 일치하지 않습니다.\n패스워드를 다시 입력해주세요!"
+              "로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!"
             );
         })
         .catch((error) => {
-          alert("정보를 찾을 수 없습니다.\n이메일을 다시 입력해주세요!"); // 실패했다면
+          alert("로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!"); // 실패했다면
           // 에러메시지 콘솔 출력
           console.log(error); // 'Request failed with status code 500'
         });
