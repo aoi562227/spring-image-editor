@@ -1,5 +1,6 @@
 package capstone.imageedit.login.web.member;
 
+//import capstone.imageedit.config.WebSecurityConfig;
 import capstone.imageedit.login.domain.member.Member;
 import capstone.imageedit.login.domain.member.MemberRepository;
 
@@ -17,11 +18,21 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+//    @Autowired
+//    WebSecurityConfig webSecurityConfig;
 
 
     public String join(Member member) {
-//        Member member = new Member(dto.getLoginId(),dto.getPassword(),dto.getName());
         if (validateDuplicateMember(member)) {
+
+
+//            String encodedPassword = webSecurityConfig.getPasswordEncoder().encode(member.getPassword());
+//            Member newMember = Member
+//                    .builder()
+//                    .loginId(member.getLoginId())
+//                    .password(encodedPassword)
+//                    .name(member.getName()).build();
+//            memberRepository.save(newMember);
             memberRepository.save(member);
             log.info("join 성공");
             return "성공";
@@ -30,7 +41,8 @@ public class MemberService {
         }
     }
 
-    public Member login(Member member) {
+    public Member login(Member member) throws Exception{
+
         Member memberByLoginId = memberRepository.findMemberByLoginId(member.getLoginId());
         if (member.getPassword().equals(memberByLoginId.getPassword())) {
             log.info("로그인 성공");
