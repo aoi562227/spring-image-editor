@@ -44,7 +44,11 @@ const LoginForm = (props) => {
           // 성공했다면
           if (response.data.name !== null) {
             console.log("response data: " + JSON.stringify(response.data));
-            returnUserData(`${response.data.name}`, true); // 부모 컴포넌트(AppHeader)로 name과 로그인 성공 전달
+            returnUserData(
+              `${response.data.name}`,
+              `${response.data.loginId}`,
+              true
+            ); // 부모 컴포넌트(AppHeader)로 name과 로그인 성공 전달
             // 기존에 input 태그에 입력했던 값들 제거
             for (const [key, value] of Object.entries({
               userEmail: "",
@@ -55,10 +59,7 @@ const LoginForm = (props) => {
             }
             props.closeLogin(); // 로그인 창 닫기
           } // 실패했다면
-          else
-            alert(
-              "로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!"
-            );
+          else alert("로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!");
         })
         .catch((error) => {
           alert("로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!"); // 실패했다면
