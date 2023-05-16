@@ -1,6 +1,0 @@
-/*!
- * TOAST UI ImageEditor : React Wrapper
- * @version 3.15.2
- * @author NHN. FE Development Team <dl_javascript@nhn.com>
- * @license MIT
- */
