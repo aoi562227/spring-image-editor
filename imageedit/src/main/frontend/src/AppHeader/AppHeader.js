@@ -3,15 +3,14 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import AddMemberForm from "./AddMemberForm";
 import LoginForm from "./LoginForm";
-import LoadProjectForm from "./LoadProjectForm";
+// import LoadProjectForm from "./LoadProjectForm";
 
 const AppHeader = (props) => {
   const fileUploadInput = useRef(null);
-  const originalFile = useRef(null);
 
   const [addMemberIsOpen, setAddMemberIsOpen] = useState(false); // 회원가입 창의 초기 표시 유무 false
   const [loginIsOpen, setLoginIsOpen] = useState(false); // 로그인 창의 초기 표시 유무 false
-  const [loadProjectIsOpen, setLoadProjectIsOpen] = useState(false); // 프로젝트 불러오기 창의 초기 표시 유무 false
+  // const [loadProjectIsOpen, setLoadProjectIsOpen] = useState(false); // 프로젝트 불러오기 창의 초기 표시 유무 false
   const [userLoginState, setUserLoginState] = useState(false); // 로그인 유무 초기 상태 false
   const [userName, setUserName] = useState(null); // 유저 이름 초기 상태 빈 문자열
   const [userEmail, setUserEmail] = useState(null); // 유저 이메일 초기 상태 빈 문자열
@@ -34,6 +33,7 @@ const AppHeader = (props) => {
   const closeLogin = () => {
     setLoginIsOpen(false);
   };
+  /*
   // 프로젝트 불러오기 창 열기
   const openLoadProject = () => {
     setLoadProjectIsOpen(true);
@@ -42,6 +42,7 @@ const AppHeader = (props) => {
   const closeLoadProject = () => {
     setLoadProjectIsOpen(false);
   };
+  */
   // 로그아웃
   const logout = () => {
     setUserLoginState(false);
@@ -72,21 +73,39 @@ const AppHeader = (props) => {
 
     return new Blob([uInt8Array], { type: mimeString });
   };
-  /*
-  useEffect(() => {
-    originalFile.current = base64ToBlob(
-      myImageEditor.current.imageEditorInst.toDataURL()
-    );
-    console.log(originalFile.current);
-  }, [myImageEditor]);
 
-  let file = originalFile.current;
-  console.log(file);
-*/
-  let file;
+  let file = null;
+
+  // 프로젝트 불러오기
+  const onClickLoadProject = async (e) => {
+    await axios
+    // /load 주소로 데이터 전달
+      .post("/load", userEmail)
+      .then((response) => {
+        // 성공했다면
+        return response.data;
+        /*
+        if (response.data) {
+          return response.data;
+        } // 실패했다면
+        else alert("대충 실패했다는 뜻");
+        */
+      })
+      .catch((error) => {
+        // 에러메시지 콘솔 출력
+        console.log(error); // 'Request failed with status code 500'
+      });
+  }
 
   // 프로젝트 저장
   const onClickSaveProject = (e) => {
+    if (file === null) {
+      alert("샘플 이미지는 저장할 수 없습니다!");
+      return;
+    }
+    file = base64ToBlob(
+      myImageEditor.current.imageEditorInst.toDataURL()
+    );
     myImageEditor.current.imageEditorInst.ui.eventHandler.upload(
       userEmail,
       file
@@ -96,6 +115,8 @@ const AppHeader = (props) => {
   // 업로드
   const onClickLoad = (e) => {
     file = e.target.files[0];
+    console.log(file);
+    console.log(e.target.files[0].name);
 
     if (file) {
       myImageEditor.current.imageEditorInst.ui.eventHandler.loadImage(e);
@@ -189,13 +210,16 @@ const AppHeader = (props) => {
             </button>
           </>
         )}
-        <button className="projectLoadBtn" onClick={openLoadProject}>
+        <button className="projectLoadBtn" onClick={onClickLoadProject}>
           프로젝트 불러오기
-        </button>
+        </button>{
+        /*
         <LoadProjectForm
           loadProjectIsOpen={loadProjectIsOpen}
           closeLoadProject={closeLoadProject}
         ></LoadProjectForm>
+        */
+        }
         <button className="projectSaveBtn" onClick={onClickSaveProject}>
           프로젝트 저장
         </button>
