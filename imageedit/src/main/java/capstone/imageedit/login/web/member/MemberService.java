@@ -64,8 +64,11 @@ public class MemberService {
         }
     }
 
-    public String uploadService(Member member) {
+    public String uploadService(String loginId, String blobs, String stack) {
+        Member member = memberRepository.findMemberByLoginId(loginId);
         if (!validateDuplicateMember(member)) {
+            member.setBlob(blobs);
+            member.setStack(stack);
             memberRepository.save(member);
             return "성공";
         } else return "실패";

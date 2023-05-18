@@ -1,6 +1,7 @@
 package capstone.imageedit.login.web.member;
 
 import capstone.imageedit.login.domain.member.Member;
+import capstone.imageedit.login.domain.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     //    @ResponseBody
     @PostMapping("/signUp")
@@ -36,8 +39,8 @@ public class MemberController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public String upload(@RequestBody Member member) {
-        return memberService.uploadService(member);
+    public String upload(@RequestBody String loginId, String blobs, String stack) {
+        return memberService.uploadService(loginId, blobs, stack);
     }
 
     @PostMapping("/download")

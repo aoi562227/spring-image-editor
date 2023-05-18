@@ -94,12 +94,12 @@ public class Member {
 //    private LocalDateTime createDate;
 
     @Builder
-    public Member(String loginId, String password, String name) {
+    public Member(String loginId, String password, String name, String blobs, String stack) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
-        this.blobs = null;
-        this.stack = null;
+        this.blobs = blobs;
+        this.stack = stack;
     }
 
 
