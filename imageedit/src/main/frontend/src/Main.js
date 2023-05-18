@@ -6,7 +6,7 @@ import AppHeader from "./AppHeader/AppHeader";
 
 const myTheme = {
   // Theme object to extends default dark theme.
-  //"header.display": "none"
+  "header.display": "none",
 };
 
 const Main = (props) => {

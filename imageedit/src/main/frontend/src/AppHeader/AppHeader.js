@@ -193,7 +193,7 @@ const AppHeader = (props) => {
             userLoginState === false
               ? {
                   opacity: "0.6",
-                  cursor: "not-allowed",
+                  cursor: "default",
                 }
               : {}
           }
@@ -207,7 +207,7 @@ const AppHeader = (props) => {
             userLoginState === false
               ? {
                   opacity: "0.6",
-                  cursor: "not-allowed",
+                  cursor: "default",
                 }
               : {}
           }
