@@ -43,7 +43,9 @@ const LoginForm = (props) => {
         .then((response) => {
           // 성공했다면
           if (response.data.name !== null) {
-            console.log("response data: " + JSON.stringify(response.data));
+            console.log(
+              "login response data: " + JSON.stringify(response.data)
+            );
             returnUserData(
               `${response.data.name}`,
               `${response.data.loginId}`,

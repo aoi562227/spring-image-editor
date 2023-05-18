@@ -64,16 +64,53 @@ const AppHeader = (props) => {
   let file = null;
 
   // 프로젝트 불러오기
-  const onClickLoadProject = (e) => {
+  const onClickLoadProject = async (e) => {
     if (userLoginState === false) {
       alert("프로젝트 저장/불러오기 기능은 로그인 상태에서만 이용 가능합니다!");
       return;
     }
-    myImageEditor.current.imageEditorInst.ui.eventHandler.retrieve(userEmail);
+    //myImageEditor.current.imageEditorInst.ui.eventHandler.retrieve(userEmail);
+    await axios
+      // /download 주소로 데이터 전달
+      .post("/download", {
+        loginId: userEmail,
+      })
+      .then((response) => {
+        // 성공했다면
+        if (response.data !== "") {
+          console.log(JSON.stringify(response.data).replaceAll("\\", ""));
+        } else {
+          // 실패했다면
+          alert("프로젝트 불러오기에 실패하였습니다!");
+        }
+        /*
+        console.log(response.data);
+
+        let data = JSON.parse(response.data); // JSON 파싱
+
+        // 이미지 파일 로드
+        this.load(new File(data.image, "image"));
+
+        // 스택 데이터 Push
+        for (x in data.stackData.undoStack)
+          this.pushUndoStack(x);
+        for (x in data.stackData.redoStack)
+          this.pushRedoStack(x);
+        
+        // canvas 데이터로 작업 내역 복구
+        let canvasData = data.canvasData;
+        let canvas = this._graphics.getCanvas();
+        canvas.loadFromJSON(canvasData,canvas.renderAll.bind(canvas));
+        */
+      })
+      .catch((error) => {
+        // 에러메시지 콘솔 출력
+        console.log(error);
+      });
   };
 
   // 프로젝트 저장
-  const onClickSaveProject = (e) => {
+  const onClickSaveProject = async (e) => {
     if (userLoginState === false) {
       alert("프로젝트 저장/불러오기 기능은 로그인 상태에서만 이용 가능합니다!");
       return;
@@ -82,14 +119,60 @@ const AppHeader = (props) => {
       alert("샘플 이미지는 저장할 수 없습니다!");
       return;
     }
-    file = base64ToBlob(myImageEditor.current.imageEditorInst.toDataURL());
-    console.log(
-      base64ToBlob(myImageEditor.current.imageEditorInst.toDataURL()) // 이미지 blob파일
-    );
-    myImageEditor.current.imageEditorInst.ui.eventHandler.upload(
-      userEmail,
-      file
-    );
+    // file = base64ToBlob(myImageEditor.current.imageEditorInst.toDataURL());
+    // myImageEditor.current.imageEditorInst.ui.eventHandler.upload(userEmail,file);
+
+    let commandJson =
+      `{"undoStack":` +
+      JSON.stringify(
+        myImageEditor.current.imageEditorInst._invoker.getUndoStack()
+      ) +
+      `,"redoStack":` +
+      JSON.stringify(
+        myImageEditor.current.imageEditorInst._invoker.getRedoStack()
+      ) +
+      "}";
+
+    let canvas = myImageEditor.current.imageEditorInst._graphics.getCanvas();
+    let canvasJson = canvas.toJSON();
+    canvasJson = JSON.stringify(canvasJson);
+
+    let projectJson =
+      `{"stackData":` + commandJson + `,"canvasData":` + canvasJson + "}";
+    console.log("JSON 결과 : " + projectJson);
+
+    let formData = new FormData();
+    // userEmail 추가
+    formData.append("loginId", userEmail);
+    // image file 추가
+    // 이미지 파일을 어떻게 보내고 어떻게 받아서 그걸 또 로드하고
+    // formData.append("blobs", file);
+    // JSON 추가
+    formData.append("stack", projectJson);
+
+    for (let [key, value] of formData.entries())
+      console.log(`key: ${key}, value: ${value}`);
+
+    // Content-Type 지정
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await axios
+      // /upload 주소로 데이터 전달
+      .post("/upload", formData, config)
+      .then((response) => {
+        // 성공했다면
+        console.log(response.data);
+        if (response.data === "성공") alert("성공적으로 저장되었습니다!");
+        else alert("저장 실패하였습니다!");
+      })
+      .catch((error) => {
+        // 에러메시지 콘솔 출력
+        console.log(error);
+      });
   };
 
   // 업로드

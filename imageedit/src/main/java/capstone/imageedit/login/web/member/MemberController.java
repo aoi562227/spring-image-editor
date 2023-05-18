@@ -5,6 +5,8 @@ import capstone.imageedit.login.domain.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 //@RequiredArgsConstructor
@@ -37,10 +39,11 @@ public class MemberController {
         return memberService.login(member);
     }
 
-    @PostMapping("/upload")
+    //@PostMapping("/upload")
     @ResponseBody
-    public String upload(@RequestBody String loginId, String blobs, String stack) {
-        return memberService.uploadService(loginId, blobs, stack);
+    @RequestMapping(value="/upload", method=RequestMethod.POST, consumes="multipart/form-data")
+    public String upload(MultipartHttpServletRequest req) throws Exception {
+        return memberService.uploadService(req);
     }
 
     @PostMapping("/download")

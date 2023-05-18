@@ -1,3 +1,4 @@
+/*
 package capstone.imageedit.crawling;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -80,3 +81,4 @@ public class ImageDownloader {
         FileUtils.copyURLToFile(url, file);
     }
 }
+*/

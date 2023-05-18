@@ -8,9 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.sql.Blob;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
 import java.util.List;
-
 @Service
 @Transactional
 @Slf4j
@@ -63,7 +70,39 @@ public class MemberService {
             return true;
         }
     }
-
+    private Blob convertFileToBlob(File file) throws Exception {
+        Blob blob = null;
+        FileInputStream inputStream = null;
+      
+        try {
+            byte[] byteArray = new byte[(int) file.length()];
+            inputStream = new FileInputStream(file);
+            inputStream.read(byteArray);
+       
+            blob = new javax.sql.rowset.serial.SerialBlob(byteArray); 
+       
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                inputStream = null;
+            } finally {
+                inputStream = null;
+            }
+        }
+      
+        return blob;
+    }
+    public File multipartToFile(MultipartFile mfile) throws IllegalStateException, IOException {
+        File file = new File(mfile.getOriginalFilename());
+        mfile.transferTo(file);
+        return file;
+    }
+    /*
     public String uploadService(String loginId, String blobs, String stack) {
         Member member = memberRepository.findMemberByLoginId(loginId);
         if (!validateDuplicateMember(member)) {
@@ -73,9 +112,30 @@ public class MemberService {
             return "성공";
         } else return "실패";
     }
+    */
+    public String uploadService(MultipartHttpServletRequest req) throws Exception{
+        String loginId = req.getParameter("loginId");
+
+        //MultipartFile blobFile = req.getFile("blobs");
+        //Blob blobs = convertFileToBlob(multipartToFile(blobFile)); // MultipartFile -> File -> Blob
+
+        String stack = req.getParameter("stack");
+
+        log.info(loginId);
+        //log.info(blobs);
+        log.info(stack);
+
+        Member member = memberRepository.findMemberByLoginId(loginId);
+        if (!validateDuplicateMember(member)) {
+            //member.setBlob(blobs);
+            member.setStack(stack);
+            memberRepository.save(member);
+            return "성공";
+        } else return "실패";
+    }
 
     public Member downloadService(Member member) {
-        if (validateDuplicateMember(member)) {
+        if (!validateDuplicateMember(member)) {
             Member findMember = memberRepository.findMemberByLoginId(member.getLoginId());
             log.info("불러오기 성공");
             return findMember;

@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.sql.Blob;
 
 @Entity
 @DynamicUpdate
@@ -44,11 +45,11 @@ public class Member {
         this.name = name;
     }
 
-    public String getBlobs() {
+    public Blob getBlobs() {
         return blobs;
     }
 
-    public void setBlob(String blobs) {
+    public void setBlob(Blob blobs) {
         this.blobs = blobs;
     }
 
@@ -79,9 +80,10 @@ public class Member {
 
     @Column
     @Lob
-    private String blobs;
+    private Blob blobs;
 
     @Column
+    @Lob
     private String stack;
 //    @Type(type="json")
 //    @Column(columnDefinition = "json")
@@ -94,7 +96,7 @@ public class Member {
 //    private LocalDateTime createDate;
 
     @Builder
-    public Member(String loginId, String password, String name, String blobs, String stack) {
+    public Member(String loginId, String password, String name, Blob blobs, String stack) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
