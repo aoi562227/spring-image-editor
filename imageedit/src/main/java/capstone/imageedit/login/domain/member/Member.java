@@ -3,7 +3,9 @@ package capstone.imageedit.login.domain.member;
 import capstone.imageedit.util.Aes256Converter;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicUpdate
 public class Member {
 //    @Builder
 
@@ -41,6 +44,23 @@ public class Member {
         this.name = name;
     }
 
+    public String getBlobs() {
+        return blobs;
+    }
+
+    public void setBlob(String blobs) {
+        this.blobs = blobs;
+    }
+
+    public String getStack() {
+        return stack;
+    }
+
+    public void setStack(String stack) {
+        this.stack = stack;
+    }
+
+
     //    public Member(String loginId, String password, String name) {
 //        this.loginId = loginId;
 //        this.password = password;
@@ -49,9 +69,24 @@ public class Member {
 
     @Id
     private String loginId;
+
+    @Column
     @Convert(converter = Aes256Converter.class)
     private String password;
+
+    @Column
     private String name;
+
+    @Column
+    @Lob
+    private String blobs;
+
+    @Column
+    private String stack;
+//    @Type(type="json")
+//    @Column(columnDefinition = "json")
+//    private String json;
+
 
 
 
@@ -63,6 +98,8 @@ public class Member {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
+        this.blobs = null;
+        this.stack = null;
     }
 
 

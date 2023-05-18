@@ -64,6 +64,24 @@ public class MemberService {
         }
     }
 
+    public String uploadService(Member member) {
+        if (!validateDuplicateMember(member)) {
+            memberRepository.save(member);
+            return "성공";
+        } else return "실패";
+    }
+
+    public Member downloadService(Member member) {
+        if (validateDuplicateMember(member)) {
+            Member findMember = memberRepository.findMemberByLoginId(member.getLoginId());
+            log.info("불러오기 성공");
+            return findMember;
+        } else {
+            log.info("불러오기 실패");
+            return null;
+        }
+    }
+
 //    public Member findOne(String loginId) {
 //        return memberRepository.findOne(loginId);
 //    }

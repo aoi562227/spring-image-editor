@@ -33,6 +33,18 @@ public class MemberController {
     public Member login(@RequestBody Member member) throws Exception {
         return memberService.login(member);
     }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public String upload(@RequestBody Member member) {
+        return memberService.uploadService(member);
+    }
+
+    @PostMapping("/download")
+    @ResponseBody
+    public Member download(@RequestBody Member member) {
+        return memberService.downloadService(member);
+    }
 }
 
 
