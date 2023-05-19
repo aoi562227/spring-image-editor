@@ -78,7 +78,12 @@ const AppHeader = (props) => {
       .then((response) => {
         // 성공했다면
         if (response.data !== "") {
-          console.log(JSON.stringify(response.data).replaceAll("\\", ""));
+          let data = JSON.parse(response.data);
+          let path = JSON.stringify(data.path);
+          let stack = JSON.stringify(data.stack).replaceAll("\\", "");
+          console.log("path: " + path);
+          console.log("stack: " + stack)
+
         } else {
           // 실패했다면
           alert("프로젝트 불러오기에 실패하였습니다!");
@@ -146,7 +151,7 @@ const AppHeader = (props) => {
     formData.append("loginId", userEmail);
     // image file 추가
     // 이미지 파일을 어떻게 보내고 어떻게 받아서 그걸 또 로드하고
-    // formData.append("blobs", file);
+    formData.append("blobs", file);
     // JSON 추가
     formData.append("stack", projectJson);
 
