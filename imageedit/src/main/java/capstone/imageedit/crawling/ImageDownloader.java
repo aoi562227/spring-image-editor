@@ -36,7 +36,7 @@ public class ImageDownloader {
         // WebDriver 설정
         System.setProperty("webdriver.chrome.driver", DRIVER_PATH);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Headless 모드로 실행
+//        options.addArguments("--headless"); // Headless 모드로 실행
         WebDriver driver = new ChromeDriver(options);
 
         // 검색어로 구글 이미지 검색
