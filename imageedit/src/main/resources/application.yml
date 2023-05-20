@@ -30,7 +30,7 @@ logging:
     org.hibernate.SQL: debug
 
 openai-service:
-  api-key: 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
+  api-key: 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
   gpt-model: gpt-3.5-turbo
   audio-model: whisper-1
   http-client:
@@ -42,4 +42,4 @@ openai-service:
     create-transcription-url: /audio/transcriptions
 
 chatgpt:
-  api-key: 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
+  api-key: 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
