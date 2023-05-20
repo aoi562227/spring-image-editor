@@ -20,12 +20,11 @@ import java.net.URL;
 import java.util.List;
 
 @Controller
-@SpringBootApplication
 public class ImageDownloader {
 
     private static final String DRIVER_PATH = "chromedriver.exe";
     private static final int MAX_IMAGE_COUNT = 5;
-    private static final String IMAGE_DIR = "C:/Users/User/Desktop/imgs/";
+    private static final String IMAGE_DIR = "C:/Users/LYC/Desktop/imgs/";
 
     public static void main(String[] args) {
         SpringApplication.run(ImageDownloader.class, args);

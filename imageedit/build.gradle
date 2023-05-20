@@ -33,6 +33,14 @@ dependencies {
 	implementation 'org.seleniumhq.selenium:selenium-java:3.14.0'
 	implementation 'org.seleniumhq.selenium:selenium-chrome-driver:3.14.0'
 	implementation 'commons-io:commons-io:2.6'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2021.0.3"
+	}
 }
 
 tasks.named('test') {
