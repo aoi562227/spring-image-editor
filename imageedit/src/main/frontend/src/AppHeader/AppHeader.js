@@ -29,6 +29,7 @@ const AppHeader = (props) => {
   const closeLogin = () => {
     setLoginIsOpen(false);
   };
+
   // 로그아웃
   const logout = () => {
     setUserLoginState(false);
