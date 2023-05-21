@@ -5,9 +5,18 @@ body {
   display: flex;
   justify-content: space-between;
   min-width: 533px;
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+}
+/*
+.AppHeader {
+  display: flex;
+  justify-content: space-between;
+  min-width: 533px;
   background-color: #222;
   width: 100%;
 }
+*/
 .title div,
 .title img {
   float: left;
@@ -44,20 +53,33 @@ body {
   text-align: right;
   cursor: default;
 }
-.signUpBtn,
-.projectLoadBtn,
-.loadBtn {
-  cursor: pointer;
-  border: 1px solid #ddd;
-}
 .loginBtn,
 .logoutBtn,
+.projectLoadBtn,
+.loadBtn {
+  color: white;
+  background-color: #b0e8f1;
+  border: 1px solid #b0e8f1;
+  cursor: pointer;
+  /*
+  cursor: pointer;
+  border: 1px solid #ddd;
+  */
+}
+.signUpBtn,
+.searchBtn,
 .projectSaveBtn,
 .downloadBtn {
+  color: white;
+  background-color: #7cd0d5;
+  border: 1px solid #7cd0d5;
+  cursor: pointer;
+  /*
   color: white;
   background-color: #fdba3b;
   border: 1px solid #fdba3b;
   cursor: pointer;
+  */
 }
 .modal {
   position: fixed;

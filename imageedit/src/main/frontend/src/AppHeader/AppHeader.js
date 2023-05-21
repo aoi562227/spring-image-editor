@@ -12,7 +12,6 @@ const AppHeader = (props) => {
   const [userLoginState, setUserLoginState] = useState(false); // 로그인 유무 초기 상태 false
   const [userName, setUserName] = useState(null); // 유저 이름 초기 상태 빈 문자열
   const [userEmail, setUserEmail] = useState(null); // 유저 이메일 초기 상태 빈 문자열
-  const [userTest, setUserTest] = useState("");
 
   // 회원가입 창 열기
   const openAddMember = () => {
@@ -39,6 +38,7 @@ const AppHeader = (props) => {
   const { myImageEditor } = props;
   console.log(myImageEditor);
 
+  // base64 -> Blob
   const base64ToBlob = (data) => {
     const rImageType = /data:(image\/.+);base64,/;
     let mimeString = "";
@@ -78,35 +78,43 @@ const AppHeader = (props) => {
       .then((response) => {
         // 성공했다면
         if (response.data !== "") {
-          let data = JSON.parse(response.data);
-          let path = JSON.stringify(data.path);
-          let stack = JSON.stringify(data.stack).replaceAll("\\", "");
-          console.log("path: " + path);
-          console.log("stack: " + stack)
+          console.log(response.data.path);
+          console.log(response.data.stack);
+          let path = response.data.path;
+          let stack = JSON.parse(response.data.stack);
 
+          // 이미지 파일 로드
+          /*
+          myImageEditor.current.imageEditorInst.loadImageFromURL(
+            `${path}`,
+            "image"
+          );
+          myImageEditor.current.imageEditorInst.ui.eventHandler.loadImage(file);
+          myImageEditor.current.imageEditorInst._actions.main.load(file);
+          */
+
+          // 스택 데이터 Push
+          for (let i = 0; i < stack.stackData.undoStack.length; i++)
+            myImageEditor.current.imageEditorInst._invoker.pushUndoStack(
+              stack.stackData.undoStack[i]
+            );
+          for (let i = 0; i < stack.stackData.redoStack.length; i++)
+            myImageEditor.current.imageEditorInst._invoker.pushRedoStack(
+              stack.stackData.redoStack[i]
+            );
+          // canvas 데이터로 작업 내역 복구
+          let canvasData = stack.canvasData;
+          //canvasData.backgroundImage.src = path;
+          let end = path.split("\\")[path.split("\\").length - 1];
+          canvasData.backgroundImage.src = "http://localhost:8080/" + end;
+          //delete canvasData.backgroundImage.src;
+          let canvas =
+            myImageEditor.current.imageEditorInst._graphics.getCanvas();
+          canvas.loadFromJSON(canvasData, canvas.renderAll.bind(canvas));
         } else {
           // 실패했다면
           alert("프로젝트 불러오기에 실패하였습니다!");
         }
-        /*
-        console.log(response.data);
-
-        let data = JSON.parse(response.data); // JSON 파싱
-
-        // 이미지 파일 로드
-        this.load(new File(data.image, "image"));
-
-        // 스택 데이터 Push
-        for (x in data.stackData.undoStack)
-          this.pushUndoStack(x);
-        for (x in data.stackData.redoStack)
-          this.pushRedoStack(x);
-        
-        // canvas 데이터로 작업 내역 복구
-        let canvasData = data.canvasData;
-        let canvas = this._graphics.getCanvas();
-        canvas.loadFromJSON(canvasData,canvas.renderAll.bind(canvas));
-        */
       })
       .catch((error) => {
         // 에러메시지 콘솔 출력
@@ -126,7 +134,9 @@ const AppHeader = (props) => {
     }
     // file = base64ToBlob(myImageEditor.current.imageEditorInst.toDataURL());
     // myImageEditor.current.imageEditorInst.ui.eventHandler.upload(userEmail,file);
-
+    console.log(
+      base64ToBlob(myImageEditor.current.imageEditorInst.toDataURL())
+    );
     let commandJson =
       `{"undoStack":` +
       JSON.stringify(
@@ -150,7 +160,6 @@ const AppHeader = (props) => {
     // userEmail 추가
     formData.append("loginId", userEmail);
     // image file 추가
-    // 이미지 파일을 어떻게 보내고 어떻게 받아서 그걸 또 로드하고
     formData.append("blobs", file);
     // JSON 추가
     formData.append("stack", projectJson);
@@ -194,7 +203,7 @@ const AppHeader = (props) => {
     /*
     myImageEditor.current.imageEditorInst.ui.eventHandler.download();
     npm run build, serve -s build는 정상적으로 실행
-    npm run start는 비정상
+    npm run start는 작동하지 않음. 왜??
     */
     const dataURL = myImageEditor.current.imageEditorInst.toDataURL();
     let imageName = myImageEditor.current.imageEditorInst.getImageName();
@@ -212,27 +221,7 @@ const AppHeader = (props) => {
       w.document.body.innerHTML = `<img src='${dataURL}'>`;
     }
   };
-  //--------- 테스트-------------
-  const onChangeTest = (e) => {
-    setUserTest(e.target.value);
-  };
-  const onClickTest = async (e) => {
-    await axios
-      .post("/search", `${userTest}`)
-      .then((response) => {
-        // 성공했다면
-        if (response.data !== "이미지 다운로드 완료") {
-          console.log("response data: " + JSON.stringify(response.data));
-          alert(response.data);
-        } // 실패했다면
-        else alert("실패");
-      })
-      .catch((error) => {
-        // 에러메시지 콘솔 출력
-        console.log(error); // 'Request failed with status code 500'
-      });
-  };
-  //----------------------------
+  const searchUrl = "http://localhost:5000/";
 
   // 자식 컴포넌트(LoginForm)으로부터 userData 받아오기
   const getUserData = (name, email, loginState) => {
@@ -243,10 +232,8 @@ const AppHeader = (props) => {
 
   return (
     <div className="AppHeader">
-      <input value={userTest} onChange={onChangeTest} />
-      <button onClick={onClickTest}>테스트</button>
       <div className="title">
-        <img src="./img/titleLogo.png" alt="logo" />
+        <img src="./img/titleLogo2.png" alt="logo" />
       </div>
       <div className="headerButtons">
         {!userLoginState && ( // 회원가입과 로그인. 로그인 상태가 아니면 표시
@@ -277,10 +264,19 @@ const AppHeader = (props) => {
           </>
         )}
         <button
+          className="searchBtn"
+          onClick={() => {
+            window.open(searchUrl);
+          }}
+        >
+          이미지 검색
+        </button>
+        <button
           style={
             userLoginState === false
               ? {
-                  opacity: "0.6",
+                  backgroundColor: "#868686",
+                  opacity: 0.6,
                   cursor: "default",
                 }
               : {}
@@ -294,7 +290,8 @@ const AppHeader = (props) => {
           style={
             userLoginState === false
               ? {
-                  opacity: "0.6",
+                  backgroundColor: "#868686",
+                  opacity: 0.6,
                   cursor: "default",
                 }
               : {}

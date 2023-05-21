@@ -82,6 +82,7 @@ public class MemberService {
         String fileName = multipartFile.getOriginalFilename();
         String rootPath = req.getSession().getServletContext().getRealPath("/");
         String path = rootPath + fileName;
+        //String path = fileName;
         File file = new File(path);
         multipartFile.transferTo(file);
 

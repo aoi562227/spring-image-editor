@@ -3,11 +3,9 @@ import "tui-image-editor/dist/tui-image-editor.css";
 import ImageEditor from "@toast-ui/react-image-editor";
 import locale_kor from "./locale_kor";
 import AppHeader from "./AppHeader/AppHeader";
+import theme from "./theme";
 
-const myTheme = {
-  // Theme object to extends default dark theme.
-  "header.display": "none",
-};
+const myTheme = theme;
 
 const Main = (props) => {
   const editorRef = useRef(null);
