@@ -3,16 +3,27 @@ import { saveAs } from "file-saver";
 import axios from "axios";
 import AddMemberForm from "./AddMemberForm";
 import LoginForm from "./LoginForm";
+import ChatGPTForm from "./ChatGPTForm";
+//import fs from 'fs';
 
 const AppHeader = (props) => {
   const fileUploadInput = useRef(null);
 
+  const [useChatGPTIsOpen, setUseChatGPTIsOpen] = useState(false); // ChatGPT 이용 창의 초기 표시 유무 false
   const [addMemberIsOpen, setAddMemberIsOpen] = useState(false); // 회원가입 창의 초기 표시 유무 false
   const [loginIsOpen, setLoginIsOpen] = useState(false); // 로그인 창의 초기 표시 유무 false
   const [userLoginState, setUserLoginState] = useState(false); // 로그인 유무 초기 상태 false
   const [userName, setUserName] = useState(null); // 유저 이름 초기 상태 빈 문자열
   const [userEmail, setUserEmail] = useState(null); // 유저 이메일 초기 상태 빈 문자열
 
+  // ChatGPT 창 열기
+  const openUseChatGPT = () => {
+    setUseChatGPTIsOpen(true);
+  };
+  // ChatGPT 창 닫기
+  const closeUseChatGPT = () => {
+    setUseChatGPTIsOpen(false);
+  };
   // 회원가입 창 열기
   const openAddMember = () => {
     setAddMemberIsOpen(true);
@@ -106,12 +117,14 @@ const AppHeader = (props) => {
           // canvas 데이터로 작업 내역 복구
           let canvasData = stack.canvasData;
           //canvasData.backgroundImage.src = path;
-          let end = path.split("\\")[path.split("\\").length - 1];
-          canvasData.backgroundImage.src = "http://localhost:8080/" + end;
-          //delete canvasData.backgroundImage.src;
           let canvas =
             myImageEditor.current.imageEditorInst._graphics.getCanvas();
           canvas.loadFromJSON(canvasData, canvas.renderAll.bind(canvas));
+          /*
+          let readFile = fs.readFileSync(`${path}`); //이미지 파일 읽기
+          let base64Image = Buffer.from(readFile).toString('base64'); //파일 인코딩
+          */
+          //myImageEditor.current.imageEditorInst.loadImageFromFile(file);
         } else {
           // 실패했다면
           alert("프로젝트 불러오기에 실패하였습니다!");
@@ -264,6 +277,11 @@ const AppHeader = (props) => {
             </button>
           </>
         )}
+        <button className="chatGPTBtn" onClick={openUseChatGPT}>
+          ChatGPT 이용
+        </button>
+        <ChatGPTForm useChatGPTIsOpen={useChatGPTIsOpen} closeUseChatGPT={closeUseChatGPT}>
+        </ChatGPTForm>
         <button
           className="searchBtn"
           onClick={() => {
