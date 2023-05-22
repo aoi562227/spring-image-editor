@@ -46,27 +46,24 @@ body {
   text-align: center;
 }
 .headerButtons .loginMsg {
-  color: white;
+  color: black;
   width: 240px;
   margin-right: 10px;
   font-size: 16px;
   text-align: right;
   cursor: default;
 }
-.loginBtn,
-.logoutBtn,
+.signUpBtn,
+.chatGPTBtn,
 .projectLoadBtn,
 .loadBtn {
   color: white;
   background-color: #b0e8f1;
   border: 1px solid #b0e8f1;
   cursor: pointer;
-  /*
-  cursor: pointer;
-  border: 1px solid #ddd;
-  */
 }
-.signUpBtn,
+.logoutBtn,
+.loginBtn,
 .searchBtn,
 .projectSaveBtn,
 .downloadBtn {
@@ -74,12 +71,6 @@ body {
   background-color: #7cd0d5;
   border: 1px solid #7cd0d5;
   cursor: pointer;
-  /*
-  color: white;
-  background-color: #fdba3b;
-  border: 1px solid #fdba3b;
-  cursor: pointer;
-  */
 }
 .modal {
   position: fixed;
@@ -112,10 +103,10 @@ body {
   text-align: center;
 }
 .modal .btn {
-  background-color: #fdba3b;
-  background-image: linear-gradient(90deg, #fdba3b 0%, rgb(255, 166, 0) 74%);
+  background-color: #7cd0d5;
+  background-image: linear-gradient(90deg, #7cd0d5 0%, #60dde4 74%);
   border-radius: 20px;
-  border: 1px solid #fdba3b;
+  border: 1px solid #7cd0d5;
   color: white;
   cursor: pointer;
   font-size: 0.8rem;
@@ -126,10 +117,10 @@ body {
   margin-top: 1.5rem;
 }
 .modal .btn:hover {
-  background-color: #fdd03b;
-  background-image: linear-gradient(90deg, #fdd03b 0%, #ffc400 74%);
+  background-color: #b0e8f1;
+  background-image: linear-gradient(90deg, #b0e8f1 0%, #94e8f5 74%);
   border-radius: 20px;
-  border: 1px solid #fdd03b;
+  border: 1px solid #b0e8f1;
   color: white;
   cursor: pointer;
   font-size: 0.8rem;
