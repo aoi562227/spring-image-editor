@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @DynamicUpdate
 public class Member {
-//    @Builder
+    // @Builder
 
     public Member() {
     }
@@ -44,12 +44,12 @@ public class Member {
         this.name = name;
     }
 
-    public String getBlobs() {
-        return blobs;
+    public String getPath() {
+        return path;
     }
 
-    public void setBlob(String blobs) {
-        this.blobs = blobs;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getStack() {
@@ -60,12 +60,11 @@ public class Member {
         this.stack = stack;
     }
 
-
-    //    public Member(String loginId, String password, String name) {
-//        this.loginId = loginId;
-//        this.password = password;
-//        this.name = name;
-//    }
+    // public Member(String loginId, String password, String name) {
+    // this.loginId = loginId;
+    // this.password = password;
+    // this.name = name;
+    // }
 
     @Id
     private String loginId;
@@ -78,34 +77,25 @@ public class Member {
     private String name;
 
     @Column
-    @Lob
-    private String blobs;
+    private String path;
 
     @Column
+    @Lob
     private String stack;
-//    @Type(type="json")
-//    @Column(columnDefinition = "json")
-//    private String json;
+    // @Type(type="json")
+    // @Column(columnDefinition = "json")
+    // private String json;
 
-
-
-
-//    @NotNull
-//    private LocalDateTime createDate;
+    // @NotNull
+    // private LocalDateTime createDate;
 
     @Builder
-    public Member(String loginId, String password, String name, String blobs, String stack) {
+    public Member(String loginId, String password, String name, String path, String stack) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
-        this.blobs = blobs;
+        this.path = path;
         this.stack = stack;
     }
-
-
-
-
-
-
 
 }

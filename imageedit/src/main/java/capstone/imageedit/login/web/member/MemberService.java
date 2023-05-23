@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.List;
+import java.io.File;
 
 @Service
 @Transactional
@@ -18,21 +20,20 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
-//    @Autowired
-//    WebSecurityConfig webSecurityConfig;
-
+    // @Autowired
+    // WebSecurityConfig webSecurityConfig;
 
     public String join(Member member) {
         if (validateDuplicateMember(member)) {
 
-
-//            String encodedPassword = webSecurityConfig.getPasswordEncoder().encode(member.getPassword());
-//            Member newMember = Member
-//                    .builder()
-//                    .loginId(member.getLoginId())
-//                    .password(encodedPassword)
-//                    .name(member.getName()).build();
-//            memberRepository.save(newMember);
+            // String encodedPassword =
+            // webSecurityConfig.getPasswordEncoder().encode(member.getPassword());
+            // Member newMember = Member
+            // .builder()
+            // .loginId(member.getLoginId())
+            // .password(encodedPassword)
+            // .name(member.getName()).build();
+            // memberRepository.save(newMember);
             memberRepository.save(member);
             log.info("join 성공");
             return "성공";
@@ -41,7 +42,7 @@ public class MemberService {
         }
     }
 
-    public Member login(Member member) throws Exception{
+    public Member login(Member member) throws Exception {
 
         Member memberByLoginId = memberRepository.findMemberByLoginId(member.getLoginId());
         if (member.getPassword().equals(memberByLoginId.getPassword())) {
@@ -51,11 +52,9 @@ public class MemberService {
         return member;
     }
 
-
     private boolean validateDuplicateMember(Member member) {
-        Member findMember =
-                memberRepository.findMemberByLoginId(member.getLoginId());
-        if (findMember!=null) {
+        Member findMember = memberRepository.findMemberByLoginId(member.getLoginId());
+        if (findMember != null) {
             log.info("회원 중복");
             return false;
         } else {
@@ -64,18 +63,47 @@ public class MemberService {
         }
     }
 
-    public String uploadService(String loginId, String blobs, String stack) {
+    /*
+     * public String uploadService(String loginId, String blobs, String stack) {
+     * Member member = memberRepository.findMemberByLoginId(loginId);
+     * if (!validateDuplicateMember(member)) {
+     * member.setBlob(blobs);
+     * member.setStack(stack);
+     * memberRepository.save(member);
+     * return "성공";
+     * } else return "실패";
+     * }
+     */
+    public String uploadService(MultipartHttpServletRequest req) throws Exception {
+        String loginId = req.getParameter("loginId");
+
+        // copy original file, and save path of copied file
+        MultipartFile multipartFile = req.getFile("blobs");
+        String fileName = multipartFile.getOriginalFilename();
+        String rootPath = req.getSession().getServletContext().getRealPath("/");
+        String path = rootPath + fileName;
+        //String path = fileName;
+        File file = new File(path);
+        multipartFile.transferTo(file);
+
+        String stack = req.getParameter("stack");
+
+        log.info(loginId);
+        log.info(path);
+        log.info(stack);
+
         Member member = memberRepository.findMemberByLoginId(loginId);
         if (!validateDuplicateMember(member)) {
-            member.setBlob(blobs);
+            member.setPath(path);
             member.setStack(stack);
             memberRepository.save(member);
             return "성공";
-        } else return "실패";
+        } else
+            return "실패";
     }
 
     public Member downloadService(Member member) {
-        if (validateDuplicateMember(member)) {
+        if (!validateDuplicateMember(member)) {
             Member findMember = memberRepository.findMemberByLoginId(member.getLoginId());
             log.info("불러오기 성공");
             return findMember;
@@ -85,10 +113,8 @@ public class MemberService {
         }
     }
 
-//    public Member findOne(String loginId) {
-//        return memberRepository.findOne(loginId);
-//    }
-
+    // public Member findOne(String loginId) {
+    // return memberRepository.findOne(loginId);
+    // }
 
 }
-

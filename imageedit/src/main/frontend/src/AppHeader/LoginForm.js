@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 
@@ -43,8 +43,14 @@ const LoginForm = (props) => {
         .then((response) => {
           // 성공했다면
           if (response.data.name !== null) {
-            console.log("response data: " + JSON.stringify(response.data));
-            returnUserData(`${response.data.name}`, true); // 부모 컴포넌트(AppHeader)로 name과 로그인 성공 전달
+            console.log(
+              "login response data: " + JSON.stringify(response.data)
+            );
+            returnUserData(
+              `${response.data.name}`,
+              `${response.data.loginId}`,
+              true
+            ); // 부모 컴포넌트(AppHeader)로 name과 로그인 성공 전달
             // 기존에 input 태그에 입력했던 값들 제거
             for (const [key, value] of Object.entries({
               userEmail: "",
@@ -55,13 +61,10 @@ const LoginForm = (props) => {
             }
             props.closeLogin(); // 로그인 창 닫기
           } // 실패했다면
-          else
-            alert(
-              "이메일 정보와 일치하지 않습니다.\n패스워드를 다시 입력해주세요!"
-            );
+          else alert("로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!");
         })
         .catch((error) => {
-          alert("정보를 찾을 수 없습니다.\n이메일을 다시 입력해주세요!"); // 실패했다면
+          alert("로그인 정보가 일치하지 않습니다.\n다시 입력해주세요!"); // 실패했다면
           // 에러메시지 콘솔 출력
           console.log(error); // 'Request failed with status code 500'
         });
