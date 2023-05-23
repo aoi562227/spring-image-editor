@@ -3,12 +3,13 @@ server:
   servlet:
     context-path: /
 
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/study?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/study?characterEncoding=UTF-8&serverTimezone=UTC #study TABLE 생성
     username: root
-    password: 123qweasd@
+    password: #비밀번호
 
   profiles:
     include: API-KEY
@@ -29,8 +30,9 @@ logging:
   level:
     org.hibernate.SQL: debug
 
+#여기에 API-KEY 입력
 openai-service:
-  api-key: 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
+  api-key: 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
   gpt-model: gpt-3.5-turbo
   audio-model: whisper-1
   http-client:
